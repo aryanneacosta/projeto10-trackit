@@ -1,28 +1,34 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from './../assets/logo.png';
 import { useState } from "react";
 import { postRegistration } from "../services/trackIt";
+import { ThreeDots } from "react-loader-spinner"
 
 export default function Registration() {
-    const [form, setForm] = useState({ email: '', name: '', image: '', password: '' })
+    const [form, setForm] = useState({ email: '', name: '', image: '', password: '' });
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     function registration(event) {
         event.preventDefault();
-        const body = {
+        setLoading(true);
+
+        postRegistration({
             email: form.email,
             name: form.name,
             image: form.image,
             password: form.password
-        }
-        console.log(body)
-
-        postRegistration(body)
+        })
             .then(resposta => {
                 console.log(resposta.data)
+                setLoading(false)
+                navigate('/')
             })
             .catch(resposta => {
                 console.log(resposta.data)
+                alert('erro no cadastro, tente novamente!')
+                setLoading(false)
             })
     }
 
@@ -40,6 +46,7 @@ export default function Registration() {
                     placeholder='email'
                     required
                     onChange={e => setForm({ ...form, email: e.target.value })}
+                    disabled={loading}
                 />
                 <input
                     type='password'
@@ -48,6 +55,7 @@ export default function Registration() {
                     placeholder='senha'
                     required
                     onChange={e => setForm({ ...form, password: e.target.value })}
+                    disabled={loading}
                 />
                 <input
                     type='name'
@@ -56,6 +64,7 @@ export default function Registration() {
                     placeholder='nome'
                     required
                     onChange={e => setForm({ ...form, name: e.target.value })}
+                    disabled={loading}
                 />
                 <input
                     type='text'
@@ -64,8 +73,20 @@ export default function Registration() {
                     placeholder='foto'
                     required
                     onChange={e => setForm({ ...form, image: e.target.value })}
+                    disabled={loading}
                 />
-                <button type="submit">Cadastrar</button>
+                <button 
+                    type="submit"
+                    disabled={loading}>
+                        {loading ?
+                            <ThreeDots 
+                                color="#FFFFFF"
+                                height={13}
+                                width={51} />
+                            :
+                            'Cadastrar'
+                        }
+                </button>
             </form>
         </Input>
         <Link to={'/'}>
