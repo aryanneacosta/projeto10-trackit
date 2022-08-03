@@ -1,35 +1,76 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from './../assets/logo.png';
+import { useState } from "react";
+import { postLogin } from './../services/trackIt';
+import { ThreeDots } from "react-loader-spinner"
 
 export default function Login() {
+    const [form, setForm] = useState({ email: '', password: '' });
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    function login(event) {
+        event.preventDefault();
+        setLoading(true);
+
+        postLogin({
+            email: form.email,
+            password: form.password
+        })
+            .then(resposta => {
+                setLoading(false)
+                navigate('/hoje')
+            })
+            .catch(resposta => {
+                alert('e-mail ou senha incorretos!')
+                setLoading(false)
+            })
+    }
+
     return (
         <Container>
             <Logo>
                 <img src={logo} alt='logo' />
             </Logo>
             <Input>
-                <form>
+                <form onSubmit={login}>
                     <input
                         type='email'
                         name='email'
-                        value={'email'}
+                        value={form.email}
                         placeholder='email'
                         required
+                        onChange={e => setForm({ ...form, email: e.target.value })}
+                        disabled={loading}
                     />
                     <input
                         type='password'
                         name='password'
-                        value={'password'}
-                        placeholder='password'
+                        value={form.password}
+                        placeholder='senha'
                         required
+                        onChange={e => setForm({ ...form, password: e.target.value })}
+                        disabled={loading}
                     />
-                    <button>Entrar</button>
+                    <button
+                        type='submit'
+                        disabled={loading}>
+                        {loading ?
+                            <ThreeDots 
+                                color="#FFFFFF"
+                                height={13}
+                                width={51} />
+                            :
+                            'Entrar'
+                        }
+
+                    </button>
                 </form>
             </Input>
             <Link to={'/cadastro'}>
                 <Register>
-                    Não tem uma conta? Cadastre-se
+                    Não tem uma conta? Cadastre-se!
                 </Register>
             </Link>
 
@@ -68,9 +109,6 @@ const Input = styled.div`
         color: var(--cinza-login);
         font-size: 18px;
         font-family: 'Lexend Deca';
-    }
-
-    input:first-child {
         margin-bottom: 6px;
     }
     
@@ -86,7 +124,6 @@ const Input = styled.div`
         font-size: 21px;
         border: 1px solid var(--azul);
         border-radius: 5px;
-        margin-top: 6px;
         margin-bottom: 25px;
     }
 `;
