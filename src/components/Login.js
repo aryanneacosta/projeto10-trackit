@@ -1,14 +1,16 @@
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import logo from './../assets/logo.png';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { postLogin } from './../services/trackIt';
-import { ThreeDots } from "react-loader-spinner"
+import { ThreeDots } from "react-loader-spinner";
+import UserContext from "../contexts/UserContext";
 
 export default function Login() {
     const [form, setForm] = useState({ email: '', password: '' });
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const { setUser } = useContext(UserContext);
 
     function login(event) {
         event.preventDefault();
@@ -20,10 +22,11 @@ export default function Login() {
         })
             .then(resposta => {
                 setLoading(false)
+                setUser(resposta.data)
                 navigate('/hoje')
             })
             .catch(resposta => {
-                alert('e-mail ou senha incorretos!')
+                alert('e-mail ou senha incorretos! Tente novamente ou faça seu cadastro!')
                 setLoading(false)
             })
     }

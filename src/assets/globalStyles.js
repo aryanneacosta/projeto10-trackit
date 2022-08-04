@@ -7,6 +7,7 @@ const GlobalStyle = createGlobalStyle`
         --cinza-fundo: #E5E5E5;
         --azul: #52B6FF;
         --azul-escuro: #126BA5;
+        text-decoration: none;
     }
 
     body {

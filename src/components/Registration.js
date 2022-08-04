@@ -21,12 +21,10 @@ export default function Registration() {
             password: form.password
         })
             .then(resposta => {
-                console.log(resposta.data)
                 setLoading(false)
                 navigate('/')
             })
             .catch(resposta => {
-                console.log(resposta.data)
                 alert('erro no cadastro, tente novamente!')
                 setLoading(false)
             })

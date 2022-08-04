@@ -17,8 +17,12 @@ function postHabits(body) {
     return promise;
 }
 
-function getHabits() {
-    const promise = axios.get(`${BASE_URL}/habits`);
+function getHabits(token) {
+    const promise = axios.get(`${BASE_URL}/habits`, {
+        headers: {
+            'Authorization' : `Bearer ${token}`
+        }
+    });
     return promise;
 }
 
@@ -27,8 +31,12 @@ function deleteHabits(habitId) {
     return promise;
 }
 
-function getToday() {
-    const promise = axios.get(`${BASE_URL}/habits/today`);
+function getToday(token) {
+    const promise = axios.get(`${BASE_URL}/habits/today`, {
+        headers: {
+            'Authorization' : `Bearer ${token}`
+        }
+    });
     return promise;
 }
 
