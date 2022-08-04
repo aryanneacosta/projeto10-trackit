@@ -5,7 +5,7 @@ import Login from './components/Login';
 import Registration from './components/Registration';
 import Habits from './components/Habits';
 import Today from './components/Today';
-import History from './components/Login';
+import History from './components/History';
 import UserContext from "./contexts/UserContext";
 import { useState } from "react";
 import HabitsContext from "./contexts/HabitsContext";
