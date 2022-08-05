@@ -17,9 +17,9 @@ export default function Today() {
                 console.log(habits)
             })
             .catch(() => {
-                console.log('erro ao carregar os hábitos de hoje')
+                alert('erro ao carregar os hábitos de hoje')
             })
-    })
+    }, []);
 
     return (
         <>

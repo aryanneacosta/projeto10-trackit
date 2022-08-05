@@ -19,6 +19,7 @@ const Top = styled.div`
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 1;
     background-color: var(--azul-escuro);
     display: flex;
     justify-content: space-between;

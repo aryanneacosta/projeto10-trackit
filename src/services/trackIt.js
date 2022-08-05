@@ -12,8 +12,12 @@ function postRegistration(body) {
     return promise;
 }
 
-function postHabits(body) {
-    const promise = axios.post(`${BASE_URL}/habits`, body);
+function postHabits(body, token) {
+    const promise = axios.post(`${BASE_URL}/habits`, body, {
+        headers: {
+            'Authorization' : `Bearer ${token}`
+        }
+    });
     return promise;
 }
 
