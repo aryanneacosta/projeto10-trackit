@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import styled from "styled-components";
 import { postHabits } from "../services/trackIt";
 import UserContext from "../contexts/UserContext";
+import { ThreeDots } from "react-loader-spinner";
 
 const week = [
     { name: 'D', isSelected: false },
@@ -13,7 +14,7 @@ const week = [
     { name: 'S', isSelected: false }
 ];
 
-export default function NewHabit({ setNewHabit }) {
+export default function NewHabit({ setNewHabit, updating, loading, setLoading }) {
     const [name, setName] = useState('');
     const [weekdays, setWeekdays] = useState(week);
     const [selectedDays, setSelectedDays] = useState([]);
@@ -25,7 +26,6 @@ export default function NewHabit({ setNewHabit }) {
                 return {
                     ...day,
                     isSelected: true
-
                 }
             } else {
                 return {
@@ -35,10 +35,10 @@ export default function NewHabit({ setNewHabit }) {
         })
         setSelectedDays([...selectedDays, dayIndex]);
         setWeekdays([...newWeek]);
-        console.log(selectedDays)
     }
 
     function habit() {
+        setLoading(true);
         const body = {
             name: name,
             days: selectedDays
@@ -46,13 +46,15 @@ export default function NewHabit({ setNewHabit }) {
 
         postHabits(body, user.token)
             .then(resposta => {
-                console.log(resposta.data)
+                setLoading(false);
+                setNewHabit(false);
+                updating();
             })
             .catch(resposta => {
-                console.log(resposta.data)
+                setLoading(false);
+                alert('Erro ao adicionar novo hábito! Tente novamente!')
             })
     }
-
 
     return (
         <Input>
@@ -63,6 +65,7 @@ export default function NewHabit({ setNewHabit }) {
                     value={name.name}
                     placeholder="nome do hábito"
                     required
+                    disabled={loading}
                     onChange={e => setName(e.target.value)}
                 />
             </form>
@@ -76,8 +79,17 @@ export default function NewHabit({ setNewHabit }) {
                 )}
             </Weekdays>
             <Buttons>
-                <Cancel onClick={() => { setNewHabit(false) }}>Cancelar</Cancel>
-                <Button onClick={habit}>Salvar</Button>
+                <Cancel onClick={() => {setNewHabit(false)}}>Cancelar</Cancel>
+                <Button onClick={habit}>
+                    {loading ?
+                        <ThreeDots 
+                        color="#FFFFFF"
+                        height={13}
+                        width={51}/>
+                        :
+                        <>Salvar</>
+                    }
+                </Button>
             </Buttons>
         </Input>
     );
@@ -89,6 +101,7 @@ const Input = styled.div`
     background-color: white;
     margin-left: 17px;
     margin-top: 20px;
+    margin-bottom: 15px;
     border-radius: 5px;
     display: flex;
     flex-direction: column;

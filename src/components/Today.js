@@ -5,10 +5,15 @@ import UserContext from "../contexts/UserContext";
 import Footer from "./Footer";
 import Header from "./Header";
 import { getToday } from "../services/trackIt";
+import dayjs from "dayjs";
+
+
 
 export default function Today() {
     const { habits, setHabits } = useContext(HabitsContext);
     const { user } = useContext(UserContext);
+    const today = dayjs();
+    const week = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 
     useEffect(() => {
         getToday(user.token)
@@ -26,8 +31,8 @@ export default function Today() {
         <Header />
         <Container>
             <Top>
-                <Title></Title>
-                <div></div>
+                <Title>{week[today.$W]}, {today.$D}/{today.$M + 1}</Title>
+                <Subtitle></Subtitle>
             </Top>
             <Habit></Habit>
         </Container>
@@ -49,17 +54,17 @@ const Top = styled.div`
     flex-direction: column;
     justify-content: center;
     margin-left: 18px;
-
-    div {
-        color: #BABABA;
-        font-size: 18px;
-        font-family: 'Lexend Deca';
-    }
 `;
 
 const Title = styled.div`
     color: var(--azul-escuro);
     font-size: 23px;
+    font-family: 'Lexend Deca';
+`;
+
+const Subtitle = styled.div`
+    color: #BABABA;
+    font-size: 18px;
     font-family: 'Lexend Deca';
 `;
 

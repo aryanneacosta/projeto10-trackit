@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
+import { deleteHabits } from "../services/trackIt";
+import UserContext from "../contexts/UserContext";
 
 const week = [
     { name: 'D' },
@@ -11,28 +13,42 @@ const week = [
     { name: 'S' }
 ];
 
-export default function HabitsList({ name, days }) {
-    const [isSelected, setIsSelected] = useState(false);
+export default function HabitsList({ name, days, id, updating }) {
+    const { user } = useContext(UserContext);
 
     function renderDays(day, index) {
-        
         let weekday = days.includes(index)
-        if (weekday) {
+        if (weekday === true) {
             return (
                 <Day
                     key={index}
                     isSelected={true}
-                > {day}
+                >
+                    {day.name}
                 </Day>
             )
         } else {
             return (
                 <Day
                     key={index}
-                    isSelected={isSelected}
-                > {day}
+                    isSelected={false}
+                >
+                    {day.name}
                 </Day>
             )
+        }
+    }
+
+    function deleteHabit(id) {
+        let confirm = window.confirm('tem certeza que quer deletar esse hábito?');
+        if (confirm = true) {
+            deleteHabits(id, user.token)
+                .then(resposta => {
+                    updating()
+                })
+                .catch(resposta => {
+                    console.log(resposta.data)
+                })
         }
     }
 
@@ -40,12 +56,14 @@ export default function HabitsList({ name, days }) {
         <Container>
             <HabitHeader>
                 <HabitTitle>{name}</HabitTitle>
+                <div onClick={() => deleteHabit(id)}>
                 <ion-icon name="trash"></ion-icon>
+                </div>
             </HabitHeader>
             <Weekdays>
                 {week.map((day, index) => renderDays(day, index))}
             </Weekdays>
-        </Container>
+        </Container >
     );
 }
 
@@ -66,8 +84,8 @@ const HabitHeader = styled.div`
 
     ion-icon[name='trash'] {
         margin-top: 13px;
-        height: 15px;
-        width: 13px;
+        height: 20px;
+        width: 18px;
         color: #666666;
     }
 `;

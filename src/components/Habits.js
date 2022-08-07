@@ -10,18 +10,23 @@ import HabitsList from "./HabitsList";
 export default function Habits() {
     const [newHabit, setNewHabit] = useState(false);
     const [habits, setHabits] = useState([]);
+    const [loading, setLoading] = useState(true);
     const { user } = useContext(UserContext);
 
     useEffect(() => {
+        updating()
+    }, []);
+
+    function updating() {
         getHabits(user.token)
             .then(resposta => {
-                console.log(resposta.data)
                 setHabits(resposta.data);
+                setLoading(false);
             })
             .catch(resposta => {
-                console.log(resposta.data)
+                console.log(resposta.data);
             })
-    }, []);
+    }
 
     return (
         <>
@@ -34,16 +39,23 @@ export default function Habits() {
                     </Plus>
                 </Top>
                 {newHabit ?
-                    <NewHabit setNewHabit={setNewHabit} />
+                    <NewHabit 
+                        setNewHabit={setNewHabit}
+                        updating={updating}
+                        loading={loading}
+                        setLoading={setLoading}
+                    />
                     :
                     <></>
                 }
 
-                {habits.map((habits, index) => 
+                {habits.map((habits, index) =>
                     <HabitsList
                         key={index}
+                        id={habits.id}
                         name={habits.name}
                         days={habits.days}
+                        updating={updating}
                     />
                 )}
 
@@ -64,6 +76,7 @@ const Container = styled.div`
     background-color: var(--cinza-fundo);
     margin-top: 70px;
     margin-bottom: 70px;
+    overflow-y: auto;
 `;
 
 const Top = styled.div`
@@ -101,7 +114,7 @@ const Plus = styled.div`
 `;
 
 const Message = styled.div`
-    margin-top: 30px;
+    margin-top: 15px;
     margin-left: 20px;
     margin-right: 20px;
     font-size: 18px;

@@ -30,8 +30,12 @@ function getHabits(token) {
     return promise;
 }
 
-function deleteHabits(habitId) {
-    const promise = axios.delete(`${BASE_URL}/habits/${habitId}`);
+function deleteHabits(habitId, token) {
+    const promise = axios.delete(`${BASE_URL}/habits/${habitId}`, {
+        headers: {
+            'Authorization' : `Bearer ${token}`
+        }
+    });
     return promise;
 }
 
