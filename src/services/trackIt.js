@@ -48,13 +48,21 @@ function getToday(token) {
     return promise;
 }
 
-function postTodayDone(body, habitId) {
-    const promise = axios.post(`${BASE_URL}/habits/${habitId}/check`, body);
+function postTodayDone(habitId, body, token) {
+    const promise = axios.post(`${BASE_URL}/habits/${habitId}/check`, body, {
+        headers: {
+            'Authorization' : `Bearer ${token}`
+        }
+    });
     return promise;
 }
 
-function postTodayUndone(body, habitId) {
-    const promise = axios.post(`${BASE_URL}/habits/${habitId}/uncheck`, body);
+function postTodayUndone(habitId, body, token) {
+    const promise = axios.post(`${BASE_URL}/habits/${habitId}/uncheck`, body, {
+        headers: {
+            'Authorization' : `Bearer ${token}`
+        }
+    });
     return promise;
 }
 

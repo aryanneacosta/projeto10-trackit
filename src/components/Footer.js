@@ -1,9 +1,12 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
+import HabitsDoneContext from "../contexts/HabitsDoneContext";
+import { useContext } from "react";
 
 export default function Footer() {
-    const percentage = 23;
+    const { habitsDone } = useContext(HabitsDoneContext);
+    const percentage = habitsDone;
 
     return (
         <Bottom>

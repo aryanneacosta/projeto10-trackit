@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
 import { deleteHabits } from "../services/trackIt";
 import UserContext from "../contexts/UserContext";
@@ -41,7 +41,7 @@ export default function HabitsList({ name, days, id, updating }) {
 
     function deleteHabit(id) {
         let confirm = window.confirm('tem certeza que quer deletar esse hábito?');
-        if (confirm = true) {
+        if (confirm) {
             deleteHabits(id, user.token)
                 .then(resposta => {
                     updating()
@@ -68,12 +68,12 @@ export default function HabitsList({ name, days, id, updating }) {
 }
 
 const Container = styled.div`
-    height: 90px;
     width: 340px;
     margin-left: 17px;
     margin-bottom: 10px;
     background-color: white;
     border-radius: 5px;
+    padding-bottom: 15px;
 `;
 
 const HabitHeader = styled.div`
