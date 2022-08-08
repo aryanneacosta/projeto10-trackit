@@ -1,42 +1,75 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import HabitsContext from "../contexts/HabitsContext";
+import HabitsDoneContext from "../contexts/HabitsDoneContext";
 import UserContext from "../contexts/UserContext";
 import Footer from "./Footer";
 import Header from "./Header";
 import { getToday } from "../services/trackIt";
 import dayjs from "dayjs";
-
-
+import TodayList from "./TodayList";
 
 export default function Today() {
-    const { habits, setHabits } = useContext(HabitsContext);
+    const { habitsDone, setHabitsDone } = useContext(HabitsDoneContext);
     const { user } = useContext(UserContext);
+    const [toDo, setToDo] = useState([]);
     const today = dayjs();
     const week = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 
     useEffect(() => {
+        updatingToday();
+    }, []);
+
+    function updatingToday() {
         getToday(user.token)
             .then(resposta => {
-                setHabits(resposta.data)
-                console.log(habits)
+                setToDo(resposta.data)
+                console.log(toDo)
             })
-            .catch(() => {
+            .catch(resposta => {
+                console.log(resposta.data)
                 alert('erro ao carregar os hábitos de hoje')
             })
-    }, []);
+    }
+
+    function progress() {
+        let total = toDo.length;
+        let done = 0;
+        toDo.map((task) => {
+            if (task.done === true) {
+                done += 1;
+            }
+            return '';
+        })
+        setHabitsDone(done / total * 100);
+        console.log(habitsDone);
+    }
+
 
     return (
         <>
-        <Header />
-        <Container>
+            <Header />
+            <Container>
             <Top>
-                <Title>{week[today.$W]}, {today.$D}/{today.$M + 1}</Title>
-                <Subtitle></Subtitle>
-            </Top>
-            <Habit></Habit>
-        </Container>
-        <Footer />
+                        <Title>{week[today.$W]}, {today.$D}/{today.$M + 1}</Title>
+                        <Subtitle>
+                            {habitsDone === 0 ?
+                                <>Nenhum hábito concluído ainda</>
+                                :
+                                <>{habitsDone}% dos hábitos concluídos</>
+                            }
+                        </Subtitle>
+                    </Top>
+                    {toDo.map((task, index) => {
+                        <TodayList
+                            key={index}
+                            task={task}
+                            progress={progress}
+                            updatingToday={updatingToday}
+                        />
+
+                    })}
+            </Container>
+            <Footer />
         </>
     );
 }
@@ -68,10 +101,3 @@ const Subtitle = styled.div`
     font-family: 'Lexend Deca';
 `;
 
-const Habit = styled.div`
-    height: 94px;
-    width: 340px;
-    background-color: white;
-    margin-left: 18px;
-    border-radius: 5px;
-`;

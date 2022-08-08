@@ -14,7 +14,7 @@ export default function Habits() {
     const { user } = useContext(UserContext);
 
     useEffect(() => {
-        updating()
+        updating();
     }, []);
 
     function updating() {

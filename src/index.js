@@ -8,17 +8,17 @@ import Today from './components/Today';
 import History from './components/History';
 import UserContext from "./contexts/UserContext";
 import { useState } from "react";
-import HabitsContext from "./contexts/HabitsContext";
+import HabitsDoneContext from "./contexts/HabitsDoneContext";
 
 function App() {
     const [user, setUser] = useState([]);
-    const [habits, setHabits] = useState([]);
+    const [habitsDone, setHabitsDone] = useState([]);
 
     return (
         <>
             <GlobalStyle />
             <UserContext.Provider value={{ user, setUser }}>
-                <HabitsContext.Provider value={{ habits, setHabits }}>
+                <HabitsDoneContext.Provider value={{ habitsDone, setHabitsDone }}>
                     <BrowserRouter>
                         <Routes>
                             <Route path='/' element={<Login />} />
@@ -28,7 +28,7 @@ function App() {
                             <Route path='/historico' element={<History />} />
                         </Routes>
                     </BrowserRouter>
-                </HabitsContext.Provider>
+                </HabitsDoneContext.Provider>
             </UserContext.Provider>
         </>
     );
