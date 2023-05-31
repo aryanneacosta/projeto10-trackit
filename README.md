@@ -3,6 +3,7 @@
 O TrackIt é uma SPA para acompanhamento de hábitos. A aplicação conta com cadastro, login, visão diária de hábitos, cadastro de novos hábitos e remoção de hábitos antigos.
 
 Décimo projeto feito no bootcamp Driven de desenvolvimento FullStack.
+Projeto pensado com layout para celular.
 
 Link para acessá-lo: https://projeto10-trackit-nu-brown.vercel.app/
 
